@@ -1088,7 +1088,8 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
     $dateformat = get_string('strftimerecentfull', 'langconfig');
     $tableoptions = array('class' => 'progressBarProgressTable',
                           'cellpadding' => '0',
-                          'cellspacing' => '0');
+                          'cellspacing' => '0',
+                          'role' => 'presentation');
 
     // Get colours and use defaults if they are not set in global settings.
     $colournames = array(
