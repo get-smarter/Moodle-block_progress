@@ -1114,6 +1114,7 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
       $content .= HTML_WRITER::start_tag('div', array('class' => 'progressContainer'));
       $content .= HTML_WRITER::tag('span', get_string('progress', 'block_progress').': ', array('class' => 'progressLabel'));
       $content .= HTML_WRITER::tag('span', $progress.'%', array('class' => 'progressPercentage'));
+      $content .= $OUTPUT->help_icon('my_progress', 'block_progress');
       $content .= HTML_WRITER::end_tag('div');
     }
 
