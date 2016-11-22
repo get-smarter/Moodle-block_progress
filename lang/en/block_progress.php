@@ -164,7 +164,8 @@ $string['how_group_works'] = 'How visible group works';
 $string['how_group_works_help'] = '
 <p>Selecting a group will limit the display of the this block to that group only.</p>
 ';
-
+$string['my_progress'] = 'My Progress';
+$string['my_progress_help'] = 'We encourage you to complete all activities in each module to gain the most out of your learning experience. However, the only compulsory activities are those with "(graded activity)" included in their names. If you do not complete the other, non-graded, activities, your grades for the module will not be affected.';
 
 // Other terms.
 $string['addallcurrentitems'] = 'Add all activities/resources';
