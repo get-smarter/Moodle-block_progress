@@ -1057,7 +1057,18 @@ function block_progress_attempts($modules, $config, $events, $userid, $course) {
             }
 
             // Check if the user has attempted the module.
-            $attempts[$uniqueid] = $DB->record_exists_sql($query, $parameters) ? true : false;
+            //catch the fatal error thrown by record_exists_sql(shows cannot read from database error)
+            try {
+              $attempts[$uniqueid] = $DB->record_exists_sql($query, $parameters) ? true : false;
+              
+            } catch (Exception $e) {
+                try {
+                  error_log($e, 0);
+                  error_log("unique_id: ".serialize($uniqueid)." query: ".serialize($query), 0);
+                } catch (Exception $e) {
+
+                }
+            }
         }
     }
 
