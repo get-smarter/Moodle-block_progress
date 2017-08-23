@@ -1132,48 +1132,49 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
     // Place now arrow.
     if ((!isset($config->orderby) || $config->orderby == 'orderbytime') && $config->displayNow == 1 && !$simple) {
 
-        $content .= HTML_WRITER::start_tag('table', $tableoptions);
+        //$content .= HTML_WRITER::start_tag('table', $tableoptions);
+
+        $content .= HTML_WRITER::start_tag('ol', $tableoptions);
 
         // Find where to put now arrow.
         $nowpos = 0;
         while ($nowpos < $numevents && $now > $events[$nowpos]['expected']) {
             $nowpos++;
         }
-        $content .= HTML_WRITER::start_tag('tr');
+        //$content .= HTML_WRITER::start_tag('tr');
         $nowstring = get_string('now_indicator', 'block_progress');
         if ($nowpos < $numevents / 2) {
             for ($i = 0; $i < $nowpos; $i++) {
-                $content .= HTML_WRITER::tag('td', '&nbsp;', array('class' => 'progressBarHeader'));
+                $content .= HTML_WRITER::tag('li', '&nbsp;', array('class' => 'progressBarHeader'));
             }
-            $celloptions = array('colspan' => $numevents - $nowpos,
-                                 'class' => 'progressBarHeader',
+            $celloptions = array('class' => 'progressBarHeader',
                                  'style' => 'text-align:left;');
-            $content .= HTML_WRITER::start_tag('td', $celloptions);
+            $content .= HTML_WRITER::start_tag('li', $celloptions);
             $content .= $OUTPUT->pix_icon('left', $nowstring, 'block_progress');
             $content .= $nowstring;
-            $content .= HTML_WRITER::end_tag('td');
+            $content .= HTML_WRITER::end_tag('li');
         } else {
             $celloptions = array('colspan' => $nowpos,
                                  'class' => 'progressBarHeader',
                                  'style' => 'text-align:right;');
-            $content .= HTML_WRITER::start_tag('td', $celloptions);
+            $content .= HTML_WRITER::start_tag('li', $celloptions);
             $content .= $nowstring;
-            $content .= $OUTPUT->pix_icon('right', $nowstring, 'block_progress');
-            $content .= HTML_WRITER::end_tag('td');
+            //$content .= $OUTPUT->pix_icon('right', $nowstring, 'block_progress');
+            $content .= HTML_WRITER::end_tag('li');
             for ($i = $nowpos; $i < $numevents; $i++) {
-                $content .= HTML_WRITER::tag('td', '&nbsp;', array('class' => 'progressBarHeader'));
+                $content .= HTML_WRITER::tag('li', '&nbsp;', array('class' => 'progressBarHeader'));
             }
         }
-        $content .= HTML_WRITER::end_tag('tr');
+        $content .= HTML_WRITER::end_tag('ol');
     }
     else {
         $tableoptions['class'] = 'progressBarProgressTable noNow';
-        $content .= HTML_WRITER::start_tag('table', $tableoptions);
+        $content .= HTML_WRITER::start_tag('ol', $tableoptions);
     }
 
     // Start progress bar.
     $width = 100 / $numevents;
-    $content .= HTML_WRITER::start_tag('tr');
+    //$content .= HTML_WRITER::start_tag('tr');
     $counter = 1;
     foreach ($events as $event) {
         $attempted = $attempts[$event['type'].$event['id']];
@@ -1184,42 +1185,32 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
         // A cell in the progress bar.
         $celloptions = array(
             'class' => 'progressBarCell',
-            'id' => '',
-            'width' => $width.'%',
-            'onmouseover' => 'M.block_progress.showInfo('.$instance.','.$userid.','.$event['cm']->id.');',
-             'style' => 'background-color:');
+            'onfocus' => 'M.block_progress.showInfo('.$instance.','.$userid.','.$event['cm']->id.');',
+             'style' => 'width:'.$width .'%; background-color:');
         if ($attempted === true) {
             $celloptions['style'] .= $colours['attempted_colour'].';';
-            $cellcontent = $OUTPUT->pix_icon(
-                               isset($config->progressBarIcons) && $config->progressBarIcons == 1 ?
-                               'tick' : 'blank', '', 'block_progress');
-
         } else if (((!isset($config->orderby) || $config->orderby == 'orderbytime') && $event['expected'] < $now) ||
                  ($attempted === 'failed')) {
             $celloptions['style'] .= $colours['notattempted_colour'].';';
-            $cellcontent = $OUTPUT->pix_icon(
-                               isset($config->progressBarIcons) && $config->progressBarIcons == 1 ?
-                               'cross' : 'blank', '', 'block_progress');
-
         } else {
             $celloptions['style'] .= $colours['futurenotattempted_colour'].';';
-            $cellcontent = $OUTPUT->pix_icon('blank', '', 'block_progress');
         }
-        if (!empty($event['cm']->available)) {
-            $celloptions['onclick'] = 'document.location=\''.
-                $CFG->wwwroot.'/mod/'.$event['type'].'/view.php?id='.$event['cm']->id.'\';';
-        }
+
         if ($counter == 1) {
             $celloptions['id'] .= 'first';
         }
         if ($counter == $numevents) {
             $celloptions['id'] .= 'last';
         }
-        $counter++;
-        $content .= HTML_WRITER::tag('td', $cellcontent, $celloptions);
+
+        if (!empty($event['cm']->available)) {
+          $content .= HTML_WRITER::tag('li', HTML_WRITER::link(new moodle_url($CFG->wwwroot.'/mod/'.$event['type'].'/view.php', array('id'=>$event['cm']->id)), '<span class="sr-only" aria-describedby="progressBarInfo'.$instance.'-'.$userid.'-info">'.$counter.'</span>', array('onfocus' => 'M.block_progress.showInfo('.$instance.','.$userid.','.$event['cm']->id.');', 'onmouseover' => 'M.block_progress.showInfo('.$instance.','.$userid.','.$event['cm']->id.');')), $celloptions);
+        }
+
+        $counter++; 
     }
-    $content .= HTML_WRITER::end_tag('tr');
-    $content .= HTML_WRITER::end_tag('table');
+    $content .= HTML_WRITER::end_tag('li');
+    $content .= HTML_WRITER::end_tag('ol');
 
     // Add the info box below the table.
     $divoptions = array('class' => 'progressEventInfo',
@@ -1231,8 +1222,10 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
     $content .= HTML_WRITER::end_tag('div');
 
     // Add hidden divs for activity information.
-    $displaydate = (!isset($config->orderby) || $config->orderby == 'orderbytime') &&
-                   (!isset($config->displayNow) || $config->displayNow == 1);
+    $displaydate = (!isset($config->orderby) || $config->orderby == 'orderbytime') && (!isset($config->displayNow) || $config->displayNow == 1);
+
+    $counter = 1;
+
     foreach ($events as $event) {
         $attempted = $attempts[$event['type'].$event['id']];
         $action = isset($config->{'action_'.$event['type'].$event['id']}) ?
@@ -1246,8 +1239,10 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
         $text = '';
         if (method_exists($event['cm'], 'get_icon_url')) {
             $activityicon = $event['cm']->get_icon_url();
-            $text .= html_writer::empty_tag('img',
-                array('src' => $activityicon, 'class' => 'moduleIcon', 'alt' => '', 'role' => 'presentation'));
+            $text .= HTML_WRITER::start_tag('span', array('class' => 'sr-only', 'aria-describedby' => 'progressBarInfo'.$instance.'-'.$userid.'-'.$event['cm']->id));
+            $text .= $counter;
+            $text .= HTML_WRITER::end_tag('span');
+            $text .= HTML_WRITER::empty_tag('img', array('src' => $activityicon, 'class' => 'moduleIcon', 'alt' => $action , 'role' => 'presentation'));
         } else {
             $text .= $OUTPUT->pix_icon('icon', '', $event['type'], array('class' => 'moduleIcon'));
         }
@@ -1269,6 +1264,8 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
             $content .= HTML_WRITER::end_tag('div');
         }
         $content .= HTML_WRITER::end_tag('div');
+
+        $counter++;
     }
 
     return $content;
