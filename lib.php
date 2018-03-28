@@ -1196,6 +1196,10 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
             $celloptions['style'] .= $colours['futurenotattempted_colour'].';';
         }
 
+        if (!isset($celloptions['id'])) {
+            $celloptions['id'] = '';
+        }
+
         if ($counter == 1) {
             $celloptions['id'] .= 'first';
         }
