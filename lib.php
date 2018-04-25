@@ -520,6 +520,16 @@ function block_progress_monitorable_modules() {
             ),
             'defaultAction' => 'graded'
         ),
+        'netverify' => array(
+            'actions' => array(
+                'completed'    => "SELECT id
+                                     FROM {netverify_transactions}
+                                    WHERE netverifyid = :eventid
+                                      AND userid = :userid
+                                      AND {$DB->sql_compare_text('status')} = 'Verification Successful'",
+            ),
+            'defaultAction' => 'completed'
+        ),
         'ouwiki' => array(
             'actions' => array(
                 'viewed' => array (
