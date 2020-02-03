@@ -169,3 +169,34 @@
 #page-blocks-progress-overview .progressoverviewmenus select {
     margin-left: 2px;
 }
+
+/* Temp fix until converted to plugin */
+#page-blocks-progress-course #region-main .card-block {
+    display: inline;
+    padding: 0;
+    border: none;
+}
+#page-blocks-progress-course [data-region="blocks-column"] {
+    width: 100% !important;
+}
+
+#page-blocks-progress-course .card-title {
+    font-size: 36px !important;
+    text-align: left;
+}
+
+#page-blocks-progress-course .progressContainer {
+    text-align: left !important;
+}
+
+#page-blocks-progress-course .progressSubHeading {
+    font-size: 16px !important;
+    font-weight: bold;
+}
+
+#page-blocks-progress-course .progressContainer hr {
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+    border-top: 1px solid #2F2F2F;
+    margin-bottom: 10px !important;
+}

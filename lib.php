@@ -1133,6 +1133,8 @@ function block_progress_bar($modules, $config, $events, $userid, $instance, $att
     if (isset($config->showpercentage) && $config->showpercentage == 1) {
       $progress = block_progress_percentage($events, $attempts);
       $content .= HTML_WRITER::start_tag('div', array('class' => 'progressContainer'));
+      $content .= HTML_WRITER::tag('h2', get_string('progresssubheading', 'block_progress'), array('class' => 'progressSubHeading'));
+      $content .= HTML_WRITER::tag('hr', '');
       $content .= HTML_WRITER::tag('span', get_string('progress', 'block_progress').': ', array('class' => 'progressLabel'));
       $content .= HTML_WRITER::tag('span', $progress.'%', array('class' => 'progressPercentage'));
       $content .= $OUTPUT->help_icon('my_progress', 'block_progress');

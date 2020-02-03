@@ -198,6 +198,7 @@ $string['showinactive'] = 'Show inactive students in Overview';
 // Overview page strings.
 $string['lastonline'] = 'Last in course';
 $string['overview'] = 'Overview of students';
+$string['studentoverview'] = 'Overview of your progress';
 $string['progress'] = 'Progress';
 $string['progressbar'] = 'Progress Bar';
 
