@@ -117,6 +117,41 @@ function block_progress_monitorable_modules() {
                                       AND g.userid = :userid
                                       AND (g.finalgrade IS NOT NULL OR g.excluded <> 0)
                                       AND g.finalgrade >= i.gradepass",
+
+            ),
+            'defaultAction' => 'submitted'
+        ),
+        'mcode' => array(
+            'defaultTime' => 'duedate',
+            'actions' => array(
+                'submitted'    => "SELECT id
+                                     FROM {mcode_submission}
+                                    WHERE assignment = :eventid
+                                      AND userid = :userid
+                                      AND status = 'submitted'",
+                'marked'       => "SELECT g.rawgrade
+                                     FROM {grade_grades} g, {grade_items} i
+                                    WHERE i.itemmodule = 'mcode'
+                                      AND i.iteminstance = :eventid
+                                      AND i.id = g.itemid
+                                      AND g.userid = :userid
+                                      AND (g.finalgrade IS NOT NULL OR g.excluded <> 0)",
+                'passed'       => "SELECT g.finalgrade, i.gradepass
+                                     FROM {grade_grades} g, {grade_items} i
+                                    WHERE i.itemmodule = 'mcode'
+                                      AND i.iteminstance = :eventid
+                                      AND i.id = g.itemid
+                                      AND g.userid = :userid
+                                      AND (g.finalgrade IS NOT NULL OR g.excluded <> 0)",
+                'passedby'     => "SELECT g.finalgrade, i.gradepass
+                                     FROM {grade_grades} g, {grade_items} i
+                                    WHERE i.itemmodule = 'mcode'
+                                      AND i.iteminstance = :eventid
+                                      AND i.id = g.itemid
+                                      AND g.userid = :userid
+                                      AND (g.finalgrade IS NOT NULL OR g.excluded <> 0)
+                                      AND g.finalgrade >= i.gradepass",
+                
             ),
             'defaultAction' => 'submitted'
         ),
